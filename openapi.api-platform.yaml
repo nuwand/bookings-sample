@@ -1,0 +1,24 @@
+version: api-platform.wso2.com/v1
+kind: http/rest
+spec:
+  name: Property Bookings API
+  version: 1.0.0
+  context: /property-bookings-api
+  description: API to manage property bookings — create, update, cancel and query bookings. Each booking includes check-in/out dates, guest count, and price; designed for integration and AI readiness.
+  upstreams:
+    - url: https://api.bookings-sample.dev/v1
+  operations:
+    - method: GET
+      path: /bookings
+    - method: POST
+      path: /bookings
+    - method: GET
+      path: /bookings/{bookingId}
+    - method: PUT
+      path: /bookings/{bookingId}
+    - method: DELETE
+      path: /bookings/{bookingId}
+    - method: PATCH
+      path: /bookings/{bookingId}
+    - method: POST
+      path: /bookings/{bookingId}/cancel
