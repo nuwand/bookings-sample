@@ -6,7 +6,7 @@ spec:
   context: /property-bookings
   description: API to manage property bookings — create, update, cancel and query bookings. Each booking includes check-in/out dates, guest count, and price; designed for integration and AI readiness.
   upstreams:
-    - url: http://localhost:7070
+    - url: http://host.docker.internal:7070
   operations:
     - method: GET
       path: /bookings

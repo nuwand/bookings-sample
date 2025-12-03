@@ -1,3 +1,17 @@
 1. Create an API using API Designer with an AI prompt
 Prompt:
 Create an OpenAPI file for an API that is supposed to manage bookings for property. A given booking should capture check-in date, check-out data, number of guests and price. The API should support creating bookings, editing bookings and cancelling bookings.
+
+2. Once the API is created show the API readiness stuff, compliance violations, etc.
+
+3. Fix issues with AI assistance.
+
+4. Once done go to the management menu of the designer and initiate the API project.
+
+5. Provide the proper main endpoint and complete the process.
+
+6. Push code to Git repo https://github.com/nuwand/bookings-sample.
+
+7. Open the Management Portal and add a Gateway.
+
+8. After that add the API through the Github path.
