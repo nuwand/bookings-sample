@@ -1,0 +1,169 @@
+{
+  "info": {
+    "name": "Bookings Mock Server",
+    "_postman_id": "d9c78559-2c6a-4d82-9e2d-23d9a0f9c1b3",
+    "description": "Collection to exercise the mock Property Bookings API.\nBase URL is configurable via the `baseUrl` variable (defaults to http://localhost:7070).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "List bookings",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/bookings",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "bookings"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create booking",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"status 201\", function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "const body = pm.response.json();",
+              "if (body && body.id) {",
+              "    pm.collectionVariables.set(\"bookingId\", body.id);",
+              "}"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"checkInDate\": \"2025-12-20\",\n    \"checkOutDate\": \"2025-12-25\",\n    \"guests\": 2,\n    \"price\": 450\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/bookings",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "bookings"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get booking (uses bookingId variable)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/bookings/{{bookingId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "bookings",
+            "{{bookingId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Patch booking (uses bookingId variable)",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"guests\": 3,\n    \"price\": 499.99\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/bookings/{{bookingId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "bookings",
+            "{{bookingId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Cancel booking (action)",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/bookings/{{bookingId}}/cancel",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "bookings",
+            "{{bookingId}}",
+            "cancel"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete booking",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/bookings/{{bookingId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "bookings",
+            "{{bookingId}}"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:7070",
+      "type": "string"
+    },
+    {
+      "key": "bookingId",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

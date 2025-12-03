@@ -1,0 +1,266 @@
+openapi: 3.1.0
+info:
+  title: Property Bookings API
+  description: API to create, edit and cancel property bookings.
+  version: 1.0.0
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+servers:
+  - url: https://api.bookings-sample.dev/v1
+    description: Production server
+tags:
+  - name: bookings
+    description: Operations on bookings
+paths:
+  /bookings:
+    post:
+      tags:
+        - bookings
+      summary: Create a new booking
+      operationId: createBooking
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Booking'
+      responses:
+        '201':
+          description: Booking created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+    get:
+      tags:
+        - bookings
+      summary: List bookings
+      operationId: listBookings
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+      responses:
+        '200':
+          description: List of bookings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Booking'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /bookings/{bookingId}:
+    parameters:
+      - name: bookingId
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - bookings
+      summary: Retrieve a booking
+      operationId: getBooking
+      responses:
+        '200':
+          description: Found booking
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+        - bookings
+      summary: Replace a booking
+      operationId: replaceBooking
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingCreate'
+      responses:
+        '200':
+          description: Booking updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      tags:
+        - bookings
+      summary: Partially update a booking
+      operationId: updateBooking
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingUpdate'
+      responses:
+        '200':
+          description: Booking updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags:
+        - bookings
+      summary: Cancel (delete) a booking
+      operationId: cancelBooking
+      responses:
+        '204':
+          description: Booking cancelled successfully (no content)
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /bookings/{bookingId}/cancel:
+    post:
+      tags:
+        - bookings
+      summary: Cancel a booking (action)
+      operationId: actionCancelBooking
+      parameters:
+        - name: bookingId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Booking cancelled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    Booking:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique booking identifier
+        checkInDate:
+          type: string
+          format: date
+        checkOutDate:
+          type: string
+          format: date
+        guests:
+          type: integer
+          minimum: 1
+        price:
+          type: number
+          format: double
+          minimum: 0
+        status:
+          type: string
+          description: Current booking status
+          enum:
+            - confirmed
+            - cancelled
+            - pending
+      required:
+        - id
+        - checkInDate
+        - checkOutDate
+        - guests
+        - price
+        - status
+    BookingCreate:
+      type: object
+      properties:
+        checkInDate:
+          type: string
+          format: date
+        checkOutDate:
+          type: string
+          format: date
+        guests:
+          type: integer
+          minimum: 1
+        price:
+          type: number
+          format: double
+          minimum: 0
+      required:
+        - checkInDate
+        - checkOutDate
+        - guests
+        - price
+    BookingUpdate:
+      type: object
+      properties:
+        checkInDate:
+          type: string
+          format: date
+        checkOutDate:
+          type: string
+          format: date
+        guests:
+          type: integer
+          minimum: 1
+        price:
+          type: number
+          format: double
+          minimum: 0
+        status:
+          type: string
+          enum:
+            - confirmed
+            - cancelled
+            - pending
+      additionalProperties: false
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      required:
+        - code
+        - message
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+security: []
