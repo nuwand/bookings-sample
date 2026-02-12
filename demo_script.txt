@@ -15,3 +15,36 @@ Create an OpenAPI file for an API that is supposed to manage bookings for proper
 7. Open the Management Portal and add a Gateway.
 
 8. After that add the API through the Github path.
+
+
+Adding an API to the Gateway
+
+curl -X POST http://localhost:9090/apis \
+  -u admin:admin \
+  -H "Content-Type: application/yaml" \
+  --data-binary @- <<'EOF'
+version: api-platform.wso2.com/v1
+kind: http/rest
+spec:
+  name: Property Bookings API
+  version: 1.0.0
+  context: /property-bookings
+  description: API to manage property bookings — create, update, cancel and query bookings. Each booking includes check-in/out dates, guest count, and price; designed for integration and AI readiness.
+  upstreams:
+    - url: http://host.docker.internal:7070
+  operations:
+    - method: GET
+      path: /bookings
+    - method: POST
+      path: /bookings
+    - method: GET
+      path: /bookings/{bookingId}
+    - method: PUT
+      path: /bookings/{bookingId}
+    - method: DELETE
+      path: /bookings/{bookingId}
+    - method: PATCH
+      path: /bookings/{bookingId}
+    - method: POST
+      path: /bookings/{bookingId}/cancel
+EOF
